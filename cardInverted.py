@@ -55,12 +55,27 @@ for line in datafile:
     for word in currentwords:
         indexwords[word][2].append((code, currentwords[word]))
 
-invertfile = open("inverted.txt", "w")
+docsfile = open("docs.txt", "w")
 wordtuple = sorted(indexwords.items())
+docNumber = 0
+count = 0
+file = "inverted" + str(docNumber) +".txt"
+invertfile = open(file, "w")
+final = ""
 for word in wordtuple:
+    final = word[0]
     invertfile.write(str(word[1][0]) + " " + word[0] + " " + str(word[1][1]))
     word[1][2].sort(key=lambda a: a[1], reverse = True)
     for item in word[1][2]:
         invertfile.write(" " + str(item))
     invertfile.write("\n")
+    count+=1
+    if count >= 500:
+        count = 0
+        docNumber+=1
+        docsfile.write(word[0] + "\n")
+        invertfile.close()
+        file = "inverted" + str(docNumber) +".txt"
+        invertfile = open(file, "w")
+docsfile.write(final + "\n")
 invertfile.close()
