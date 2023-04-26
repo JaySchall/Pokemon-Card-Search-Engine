@@ -1,6 +1,7 @@
 #Regex for code: .+?(?=,)
 #Regex for simplifying: (.+?(?=,"))|[^\w\s']+   .*png,"|[^\w\s']+|'s
 import re
+import os
 import Stemmer
 datafile = open("train.csv", "r")
 stem = Stemmer.Stemmer("english")
@@ -29,7 +30,7 @@ for word in wordtuple:
     l+=1 
 dictionaryfile.close()
 
-print("hi")
+print("dictionary finished")
 
 indexwords = {}
 datafile = open("train.csv", "r")
@@ -59,9 +60,11 @@ docsfile = open("docs.txt", "w")
 wordtuple = sorted(indexwords.items())
 docNumber = 0
 count = 0
-file = "inverted" + str(docNumber) +".txt"
+file = "inverted/inverted" + str(docNumber) +".txt"
+os.makedirs(os.path.dirname(file), exist_ok=True)
 invertfile = open(file, "w")
 final = ""
+
 for word in wordtuple:
     final = word[0]
     invertfile.write(str(word[1][0]) + " " + word[0] + " " + str(word[1][1]))
@@ -75,7 +78,8 @@ for word in wordtuple:
         docNumber+=1
         docsfile.write(word[0] + "\n")
         invertfile.close()
-        file = "inverted" + str(docNumber) +".txt"
+        file = "inverted/inverted" + str(docNumber) +".txt"
+        #os.makedirs(os.path.dirname(file), exist_ok=True)
         invertfile = open(file, "w")
 docsfile.write(final + "\n")
 invertfile.close()
